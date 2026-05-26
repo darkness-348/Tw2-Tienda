@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Tienda.Api/Tienda.Api.csproj" />
+  <Project Path="Tienda.Application/Tienda.Application.csproj" />
+  <Project Path="Tienda.Domain/Tienda.Domain.csproj" />
+  <Project Path="Tienda.Infrastructure/Tienda.Infrastructure.csproj" />
+</Solution>
