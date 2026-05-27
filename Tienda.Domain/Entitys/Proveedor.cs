@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Tienda.Domain
+namespace Tienda.Domain.Entitys
 {
     public enum EstadoProveedor
     {

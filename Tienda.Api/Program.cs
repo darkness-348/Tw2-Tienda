@@ -1,9 +1,39 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Tienda.Application.Interfaces;
+using Tienda.Application.Services;
+using Tienda.Domain.Interfaces;
 using Tienda.Infrastructure;
+using Tienda.Infrastructure.Auth;
+using Tienda.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IPasswordHasher, BcryptPasswordHasher>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+            ValidAudience = builder.Configuration["JwtSettings:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecretKey"]!))
+        };
+    });
+
+builder.Services.AddAuthorization();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<TiendaDBContext>(options =>
@@ -22,6 +52,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 
 app.UseAuthorization();
 
