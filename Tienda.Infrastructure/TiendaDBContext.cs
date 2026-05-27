@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
-using Tienda.Domain;
+using Tienda.Domain.Entitys;
 
 namespace Tienda.Infrastructure
 {

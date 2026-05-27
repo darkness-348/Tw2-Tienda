@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Tienda.Infrastructure;
@@ -11,9 +12,11 @@ using Tienda.Infrastructure;
 namespace Tienda.Infrastructure.Migrations
 {
     [DbContext(typeof(TiendaDBContext))]
-    partial class TiendaDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260527220924_AuthImplementation")]
+    partial class AuthImplementation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
