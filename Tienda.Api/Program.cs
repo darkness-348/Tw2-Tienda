@@ -18,6 +18,7 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IPasswordHasher, BcryptPasswordHasher>();
 builder.Services.AddScoped<IPersonaRepository,PersonaRepository>();
 
+<<<<<<< HEAD
 //es practicamente el mismo que arriba, ya que el gerente pedira esos pero es para confirmar
 builder.Services.AddScoped<GerenteUseCase>();
 builder.Services.AddScoped<ProductoUseCase>();
@@ -25,6 +26,11 @@ builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
 builder.Services.AddScoped<IProductoProveedorRepository, ProductoProveedorRepository>();
 builder.Services.AddScoped<IProveedorRepository, ProveedorRepository>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+=======
+
+
+
+>>>>>>> gerente
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {

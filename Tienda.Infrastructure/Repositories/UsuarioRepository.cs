@@ -58,5 +58,13 @@ namespace Tienda.Infrastructure.Repositories
         } 
 
 
+        public async Task<Usuario?> ObtenerIdSegunJWT(int idUsuario)
+        {
+            var user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Id == idUsuario);
+            if (user is null) return null;
+            return user;
+        }
+
+    
     }
 }
