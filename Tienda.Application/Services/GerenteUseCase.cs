@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 using Tienda.Application.Dtos;
+using Tienda.Domain.Entitys;
 using Tienda.Domain.Interfaces;
 
 namespace Tienda.Application.Services
@@ -28,6 +30,24 @@ namespace Tienda.Application.Services
             }).ToList();
 
 
+        }
+        public async Task<UsuarioDTO> AsignarRol(string email,Rol rol,Rol nuevoRol)
+        {
+            var user = await _usuario.AsignarRol(email,rol,nuevoRol);
+            if (user is null) throw new Exception("No existe ese usuario");
+            return new UsuarioDTO
+            {
+                Nombre=user.Persona.Nombre,
+                Email=user.Email,
+                Rol = rol,
+                Estado=user.Estado
+            };
+        }
+        public async Task<object?> EliminarUsuario(string nombre,string email)
+        {
+            var user = await _usuario.EliminarUsuario(nombre, email);
+            if (user is null) return null;
+            return user;
         }
     }
 }

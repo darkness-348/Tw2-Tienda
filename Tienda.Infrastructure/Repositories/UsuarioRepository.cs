@@ -36,23 +36,27 @@ namespace Tienda.Infrastructure.Repositories
         public async Task<List<Usuario>> ListarUsuariosPersonas()
         {
             
-            return await _context.Usuarios.Include(u=>u.Persona).Where(u=>u.Rol != Rol.Cliente).ToListAsync(); 
+            return await _context.Usuarios.Include(u=>u.Persona).Where(u=>u.Rol != Rol.Cliente && u.Estado!=Estado.Inactivo).ToListAsync(); 
         }
 
-        public Task<Usuario> AsignarRol(int idUsuario)
+        public async Task<Usuario?> AsignarRol( string email,Rol rol,Rol nuevoRol)
         {
-            throw new NotImplementedException();
+            var user=await _context.Usuarios.FirstOrDefaultAsync(u=>u.Email==email && u.Rol==rol);
+            if (user is null) return null;
+            user.Rol = nuevoRol;
+            await _context.SaveChangesAsync();
+            return user;
         }
+        public async Task<Usuario> EliminarUsuario(string nombre, string email)
+        {
+            var user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Persona.Nombre == nombre && u.Email == email);
+            if (user is null) return null;
+            user.Estado = Estado.Inactivo;
+            await _context.SaveChangesAsync();
+            return user;
 
-        public Task QuitarRol(int idUsuario)
-        {
-            throw new NotImplementedException();
-        }
+        } 
 
-        public Task<Usuario> EditarRol(int idUsuario)
-        {
-            throw new NotImplementedException();
-        }
 
     }
 }

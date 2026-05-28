@@ -13,8 +13,8 @@ namespace Tienda.Domain.Interfaces
 
         Task<List<Usuario>> ListarUsuariosPersonas();
         
-        Task<Usuario> AsignarRol(int idUsuario);
-        Task QuitarRol(int idUsuario);
-        Task<Usuario> EditarRol(int idUsuario);
+        Task<Usuario?> AsignarRol(string correo,Rol rol,Rol nuevoRol);
+
+        Task<Usuario> EliminarUsuario(string nombre, string email);
     }
 }
