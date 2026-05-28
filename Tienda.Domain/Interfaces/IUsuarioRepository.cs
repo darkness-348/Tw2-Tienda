@@ -16,5 +16,6 @@ namespace Tienda.Domain.Interfaces
         Task<Usuario?> AsignarRol(string correo,Rol rol,Rol nuevoRol);
 
         Task<Usuario> EliminarUsuario(string nombre, string email);
+        Task<Usuario> ObtenerIdSegunJWT(int id);
     }
 }
