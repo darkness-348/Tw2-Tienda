@@ -9,5 +9,12 @@ namespace Tienda.Domain.Interfaces
     {
         Task<Usuario?> GetByEmailAsync(string email);
         Task<Usuario> AddAsync(Usuario usuario);
+
+
+        Task<List<Usuario>> ListarUsuariosPersonas();
+        
+        Task<Usuario> AsignarRol(int idUsuario);
+        Task QuitarRol(int idUsuario);
+        Task<Usuario> EditarRol(int idUsuario);
     }
 }

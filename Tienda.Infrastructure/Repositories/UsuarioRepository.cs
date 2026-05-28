@@ -7,7 +7,7 @@ using Tienda.Domain.Interfaces;
 
 namespace Tienda.Infrastructure.Repositories
 {
-    public class UsuarioRepository:IUsuarioRepository
+    public class UsuarioRepository : IUsuarioRepository
     {
         private readonly TiendaDBContext _context;
 
@@ -28,6 +28,30 @@ namespace Tienda.Infrastructure.Repositories
             await _context.SaveChangesAsync();
 
             return usuario;
+        }
+
+
+
+      
+        public async Task<List<Usuario>> ListarUsuariosPersonas()
+        {
+            
+            return await _context.Usuarios.Include(u=>u.Persona).Where(u=>u.Rol != Rol.Cliente).ToListAsync(); 
+        }
+
+        public Task<Usuario> AsignarRol(int idUsuario)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task QuitarRol(int idUsuario)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Usuario> EditarRol(int idUsuario)
+        {
+            throw new NotImplementedException();
         }
 
     }
