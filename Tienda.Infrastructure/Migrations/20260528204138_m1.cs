@@ -67,7 +67,8 @@ namespace Tienda.Infrastructure.Migrations
                     Direccion = table.Column<string>(type: "text", nullable: false),
                     Telefono = table.Column<string>(type: "text", nullable: false),
                     Relacion = table.Column<string>(type: "text", nullable: false),
-                    EstadoProveedor = table.Column<int>(type: "integer", nullable: false)
+                    EstadoProveedor = table.Column<int>(type: "integer", nullable: false),
+                    CodigoProveedor = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -85,7 +86,8 @@ namespace Tienda.Infrastructure.Migrations
                     Descripcion = table.Column<string>(type: "text", nullable: false),
                     FechaVencimiento = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EstadoProducto = table.Column<int>(type: "integer", nullable: false),
-                    CodigoBarras = table.Column<string>(type: "text", nullable: false)
+                    CodigoBarras = table.Column<string>(type: "text", nullable: false),
+                    CodigoProducto = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -121,7 +123,7 @@ namespace Tienda.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductoProveedores",
+                name: "ProductosProveedores",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -132,15 +134,15 @@ namespace Tienda.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductoProveedores", x => x.Id);
+                    table.PrimaryKey("PK_ProductosProveedores", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProductoProveedores_Productos_ProductoId",
+                        name: "FK_ProductosProveedores_Productos_ProductoId",
                         column: x => x.ProductoId,
                         principalTable: "Productos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProductoProveedores_Proveedores_ProveedorId",
+                        name: "FK_ProductosProveedores_Proveedores_ProveedorId",
                         column: x => x.ProveedorId,
                         principalTable: "Proveedores",
                         principalColumn: "Id",
@@ -297,19 +299,19 @@ namespace Tienda.Infrastructure.Migrations
                 column: "UsuarioId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductoProveedores_ProductoId",
-                table: "ProductoProveedores",
-                column: "ProductoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductoProveedores_ProveedorId",
-                table: "ProductoProveedores",
-                column: "ProveedorId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Productos_CategoriaId",
                 table: "Productos",
                 column: "CategoriaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductosProveedores_ProductoId",
+                table: "ProductosProveedores",
+                column: "ProductoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductosProveedores_ProveedorId",
+                table: "ProductosProveedores",
+                column: "ProveedorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Ventas_PersonaId",
@@ -335,7 +337,7 @@ namespace Tienda.Infrastructure.Migrations
                 name: "MovimientoStocks");
 
             migrationBuilder.DropTable(
-                name: "ProductoProveedores");
+                name: "ProductosProveedores");
 
             migrationBuilder.DropTable(
                 name: "MetodoPagos");

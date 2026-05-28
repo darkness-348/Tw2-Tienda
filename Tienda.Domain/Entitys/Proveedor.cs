@@ -17,6 +17,7 @@ namespace Tienda.Domain.Entitys
         public string Telefono { get; set; } = string.Empty;
         public string Relacion { get; set; } = string.Empty;
         public EstadoProveedor EstadoProveedor { get; set; }
+        public string CodigoProveedor { get; set; } = string.Empty;
 
         // Propiedades de Navegación
         public virtual ICollection<ProductoProveedor> ProductosProveedor { get; set; } = new List<ProductoProveedor>();
