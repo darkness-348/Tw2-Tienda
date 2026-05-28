@@ -90,7 +90,7 @@ namespace Tienda.Application.Services
 
                 FechaCreacion = DateTime.UtcNow,
 
-                Rol = Rol.Cliente,
+                Rol = Rol.EncargadoAlmacen,
 
                 Estado = Estado.Activo
             };

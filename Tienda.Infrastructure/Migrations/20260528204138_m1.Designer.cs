@@ -12,7 +12,7 @@ using Tienda.Infrastructure;
 namespace Tienda.Infrastructure.Migrations
 {
     [DbContext(typeof(TiendaDBContext))]
-    [Migration("20260527131149_m1")]
+    [Migration("20260528204138_m1")]
     partial class m1
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace Tienda.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Tienda.Domain.Categoria", b =>
+            modelBuilder.Entity("Tienda.Domain.Entitys.Categoria", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -42,7 +42,7 @@ namespace Tienda.Infrastructure.Migrations
                     b.ToTable("Categorias");
                 });
 
-            modelBuilder.Entity("Tienda.Domain.DetalleVenta", b =>
+            modelBuilder.Entity("Tienda.Domain.Entitys.DetalleVenta", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -71,7 +71,7 @@ namespace Tienda.Infrastructure.Migrations
                     b.ToTable("DetalleVentas");
                 });
 
-            modelBuilder.Entity("Tienda.Domain.MetodoPago", b =>
+            modelBuilder.Entity("Tienda.Domain.Entitys.MetodoPago", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -95,7 +95,7 @@ namespace Tienda.Infrastructure.Migrations
                     b.ToTable("MetodoPagos");
                 });
 
-            modelBuilder.Entity("Tienda.Domain.MetodoPagoVenta", b =>
+            modelBuilder.Entity("Tienda.Domain.Entitys.MetodoPagoVenta", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -124,7 +124,7 @@ namespace Tienda.Infrastructure.Migrations
                     b.ToTable("MetodoPagoVentas");
                 });
 
-            modelBuilder.Entity("Tienda.Domain.MovimientoStock", b =>
+            modelBuilder.Entity("Tienda.Domain.Entitys.MovimientoStock", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -171,7 +171,7 @@ namespace Tienda.Infrastructure.Migrations
                     b.ToTable("MovimientoStocks");
                 });
 
-            modelBuilder.Entity("Tienda.Domain.Persona", b =>
+            modelBuilder.Entity("Tienda.Domain.Entitys.Persona", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -204,7 +204,7 @@ namespace Tienda.Infrastructure.Migrations
                     b.ToTable("Personas");
                 });
 
-            modelBuilder.Entity("Tienda.Domain.Producto", b =>
+            modelBuilder.Entity("Tienda.Domain.Entitys.Producto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -216,6 +216,10 @@ namespace Tienda.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("CodigoBarras")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CodigoProducto")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -240,7 +244,7 @@ namespace Tienda.Infrastructure.Migrations
                     b.ToTable("Productos");
                 });
 
-            modelBuilder.Entity("Tienda.Domain.ProductoProveedor", b =>
+            modelBuilder.Entity("Tienda.Domain.Entitys.ProductoProveedor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -263,16 +267,20 @@ namespace Tienda.Infrastructure.Migrations
 
                     b.HasIndex("ProveedorId");
 
-                    b.ToTable("ProductoProveedores");
+                    b.ToTable("ProductosProveedores");
                 });
 
-            modelBuilder.Entity("Tienda.Domain.Proveedor", b =>
+            modelBuilder.Entity("Tienda.Domain.Entitys.Proveedor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CodigoProveedor")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Direccion")
                         .IsRequired()
@@ -298,7 +306,7 @@ namespace Tienda.Infrastructure.Migrations
                     b.ToTable("Proveedores");
                 });
 
-            modelBuilder.Entity("Tienda.Domain.Usuario", b =>
+            modelBuilder.Entity("Tienda.Domain.Entitys.Usuario", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("integer");
@@ -325,7 +333,7 @@ namespace Tienda.Infrastructure.Migrations
                     b.ToTable("Usuarios");
                 });
 
-            modelBuilder.Entity("Tienda.Domain.Venta", b =>
+            modelBuilder.Entity("Tienda.Domain.Entitys.Venta", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -361,15 +369,15 @@ namespace Tienda.Infrastructure.Migrations
                     b.ToTable("Ventas");
                 });
 
-            modelBuilder.Entity("Tienda.Domain.DetalleVenta", b =>
+            modelBuilder.Entity("Tienda.Domain.Entitys.DetalleVenta", b =>
                 {
-                    b.HasOne("Tienda.Domain.Producto", "Producto")
+                    b.HasOne("Tienda.Domain.Entitys.Producto", "Producto")
                         .WithMany("DetallesVenta")
                         .HasForeignKey("ProductoId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Tienda.Domain.Venta", "Venta")
+                    b.HasOne("Tienda.Domain.Entitys.Venta", "Venta")
                         .WithMany("DetallesVenta")
                         .HasForeignKey("VentaId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -380,15 +388,15 @@ namespace Tienda.Infrastructure.Migrations
                     b.Navigation("Venta");
                 });
 
-            modelBuilder.Entity("Tienda.Domain.MetodoPagoVenta", b =>
+            modelBuilder.Entity("Tienda.Domain.Entitys.MetodoPagoVenta", b =>
                 {
-                    b.HasOne("Tienda.Domain.MetodoPago", "MetodoPago")
+                    b.HasOne("Tienda.Domain.Entitys.MetodoPago", "MetodoPago")
                         .WithMany("MetodosPagoVenta")
                         .HasForeignKey("MetodoPagoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Tienda.Domain.Venta", "Venta")
+                    b.HasOne("Tienda.Domain.Entitys.Venta", "Venta")
                         .WithMany("MetodosPagoVenta")
                         .HasForeignKey("VentaId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -399,15 +407,15 @@ namespace Tienda.Infrastructure.Migrations
                     b.Navigation("Venta");
                 });
 
-            modelBuilder.Entity("Tienda.Domain.MovimientoStock", b =>
+            modelBuilder.Entity("Tienda.Domain.Entitys.MovimientoStock", b =>
                 {
-                    b.HasOne("Tienda.Domain.Producto", "Producto")
+                    b.HasOne("Tienda.Domain.Entitys.Producto", "Producto")
                         .WithMany("MovimientosStock")
                         .HasForeignKey("ProductoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Tienda.Domain.Usuario", "Usuario")
+                    b.HasOne("Tienda.Domain.Entitys.Usuario", "Usuario")
                         .WithMany("MovimientosStock")
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -418,9 +426,9 @@ namespace Tienda.Infrastructure.Migrations
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("Tienda.Domain.Producto", b =>
+            modelBuilder.Entity("Tienda.Domain.Entitys.Producto", b =>
                 {
-                    b.HasOne("Tienda.Domain.Categoria", "Categoria")
+                    b.HasOne("Tienda.Domain.Entitys.Categoria", "Categoria")
                         .WithMany("Productos")
                         .HasForeignKey("CategoriaId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -429,15 +437,15 @@ namespace Tienda.Infrastructure.Migrations
                     b.Navigation("Categoria");
                 });
 
-            modelBuilder.Entity("Tienda.Domain.ProductoProveedor", b =>
+            modelBuilder.Entity("Tienda.Domain.Entitys.ProductoProveedor", b =>
                 {
-                    b.HasOne("Tienda.Domain.Producto", "Producto")
-                        .WithMany("ProductosProveedor")
+                    b.HasOne("Tienda.Domain.Entitys.Producto", "Producto")
+                        .WithMany("ProductosProveedores")
                         .HasForeignKey("ProductoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Tienda.Domain.Proveedor", "Proveedor")
+                    b.HasOne("Tienda.Domain.Entitys.Proveedor", "Proveedor")
                         .WithMany("ProductosProveedor")
                         .HasForeignKey("ProveedorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -448,25 +456,25 @@ namespace Tienda.Infrastructure.Migrations
                     b.Navigation("Proveedor");
                 });
 
-            modelBuilder.Entity("Tienda.Domain.Usuario", b =>
+            modelBuilder.Entity("Tienda.Domain.Entitys.Usuario", b =>
                 {
-                    b.HasOne("Tienda.Domain.Persona", "Persona")
+                    b.HasOne("Tienda.Domain.Entitys.Persona", "Persona")
                         .WithOne("Usuario")
-                        .HasForeignKey("Tienda.Domain.Usuario", "Id")
+                        .HasForeignKey("Tienda.Domain.Entitys.Usuario", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Persona");
                 });
 
-            modelBuilder.Entity("Tienda.Domain.Venta", b =>
+            modelBuilder.Entity("Tienda.Domain.Entitys.Venta", b =>
                 {
-                    b.HasOne("Tienda.Domain.Persona", "Persona")
+                    b.HasOne("Tienda.Domain.Entitys.Persona", "Persona")
                         .WithMany("Ventas")
                         .HasForeignKey("PersonaId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("Tienda.Domain.Usuario", "Usuario")
+                    b.HasOne("Tienda.Domain.Entitys.Usuario", "Usuario")
                         .WithMany("Ventas")
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -477,45 +485,45 @@ namespace Tienda.Infrastructure.Migrations
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("Tienda.Domain.Categoria", b =>
+            modelBuilder.Entity("Tienda.Domain.Entitys.Categoria", b =>
                 {
                     b.Navigation("Productos");
                 });
 
-            modelBuilder.Entity("Tienda.Domain.MetodoPago", b =>
+            modelBuilder.Entity("Tienda.Domain.Entitys.MetodoPago", b =>
                 {
                     b.Navigation("MetodosPagoVenta");
                 });
 
-            modelBuilder.Entity("Tienda.Domain.Persona", b =>
+            modelBuilder.Entity("Tienda.Domain.Entitys.Persona", b =>
                 {
                     b.Navigation("Usuario");
 
                     b.Navigation("Ventas");
                 });
 
-            modelBuilder.Entity("Tienda.Domain.Producto", b =>
+            modelBuilder.Entity("Tienda.Domain.Entitys.Producto", b =>
                 {
                     b.Navigation("DetallesVenta");
 
                     b.Navigation("MovimientosStock");
 
-                    b.Navigation("ProductosProveedor");
+                    b.Navigation("ProductosProveedores");
                 });
 
-            modelBuilder.Entity("Tienda.Domain.Proveedor", b =>
+            modelBuilder.Entity("Tienda.Domain.Entitys.Proveedor", b =>
                 {
                     b.Navigation("ProductosProveedor");
                 });
 
-            modelBuilder.Entity("Tienda.Domain.Usuario", b =>
+            modelBuilder.Entity("Tienda.Domain.Entitys.Usuario", b =>
                 {
                     b.Navigation("MovimientosStock");
 
                     b.Navigation("Ventas");
                 });
 
-            modelBuilder.Entity("Tienda.Domain.Venta", b =>
+            modelBuilder.Entity("Tienda.Domain.Entitys.Venta", b =>
                 {
                     b.Navigation("DetallesVenta");
 
