@@ -18,6 +18,9 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IPasswordHasher, BcryptPasswordHasher>();
 builder.Services.AddScoped<IPersonaRepository,PersonaRepository>();
 
+
+
+
 //es practicamente el mismo que arriba, ya que el gerente pedira esos pero es para confirmar
 builder.Services.AddScoped<GerenteUseCase>();
 builder.Services.AddScoped<ProductoUseCase>();
