@@ -11,6 +11,7 @@ using Tienda.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Add services to the container.
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
@@ -21,6 +22,7 @@ builder.Services.AddScoped<IPersonaRepository,PersonaRepository>();
 builder.Services.AddScoped<GerenteUseCase>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
