@@ -10,5 +10,6 @@ namespace Tienda.Domain.Interfaces
     {
         Task<Proveedor> GetByCodigoProveedorAsync(string CodigoProveedor);
         Task<Proveedor> AddProveedor(Proveedor proveedor);
+        Task<List<Proveedor>> AllProveedorAsync();
     }
 }

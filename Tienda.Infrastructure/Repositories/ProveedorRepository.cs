@@ -25,6 +25,11 @@ namespace Tienda.Infrastructure.Repositories
             return provedor;
         }
 
+        public async Task<List<Proveedor>> AllProveedorAsync()
+        {
+            return await _context.Set<Proveedor>().Where(p => p.EstadoProveedor == EstadoProveedor.Activo).ToListAsync();
+        }
+
         public async Task<Proveedor?> GetByCodigoProveedorAsync(string CodigoProvedor)
         {
             return await _context.Set<Proveedor>().FirstOrDefaultAsync(p => p.CodigoProveedor==CodigoProvedor);
