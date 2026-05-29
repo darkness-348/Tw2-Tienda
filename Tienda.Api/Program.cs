@@ -26,6 +26,14 @@ builder.Services.AddScoped<IProductoProveedorRepository, ProductoProveedorReposi
 builder.Services.AddScoped<IProveedorRepository, ProveedorRepository>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 
+
+builder.Services.AddScoped<IDetalleVentaRepository,DetalleVentaRepository>();
+builder.Services.AddScoped<IVentaRepository, VentaRepository>();
+builder.Services.AddScoped<IMetodoPagoRepository, MetodoPagoRepository>();
+builder.Services.AddScoped<IMetodoPagoVentaRepository, MetodoPagoVentaRepository>();
+builder.Services.AddScoped<ITransactionManager, TransactionManagerRepository>(); // ← CORRECTO
+builder.Services.AddScoped<VentaService>(); // ← NUEVO
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {

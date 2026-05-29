@@ -11,5 +11,6 @@ namespace Tienda.Domain.Interfaces
         Task<Producto> GetByCodigoProducotAsync(string CodigoProducto);
         Task<Producto> AddProducto(Producto producto);
         Task<List<Producto>> GetAllProductosAsync();
+        Task<List<Producto>> ObtenerPorNombres(List<string> nombres); 
     }
 }

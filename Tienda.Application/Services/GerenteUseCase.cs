@@ -31,15 +31,16 @@ namespace Tienda.Application.Services
 
 
         }
-        public async Task<UsuarioDTO> AsignarRol(string email,Rol rol,Rol nuevoRol)
+        public async Task<UsuarioDTO?> AsignarRol(string email,Rol rol,Rol nuevoRol)
         {
             var user = await _usuario.AsignarRol(email,rol,nuevoRol);
-            if (user is null) throw new Exception("No existe ese usuario");
+            var pe = await _usuario.ObtenerPersonaId(user.Id);
+            if (user is null) return null;
             return new UsuarioDTO
             {
-                Nombre=user.Persona.Nombre,
+                Nombre=pe.Nombre,
                 Email=user.Email,
-                Rol = rol,
+                Rol = nuevoRol,
                 Estado=user.Estado
             };
         }

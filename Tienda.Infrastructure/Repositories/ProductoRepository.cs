@@ -32,6 +32,16 @@ namespace Tienda.Infrastructure.Repositories
         {
             return await _context.Productos.Include(p => p.Categoria).ToListAsync();
         }
-        
+
+        public async Task<List<Producto>> ObtenerPorNombres(List<string> nombres)
+        {
+            if (nombres == null || nombres.Count == 0)
+                return new List<Producto>();
+
+            return await _context.Productos
+                .Where(p => nombres.Contains(p.Nombre))
+                .Include(p => p.Categoria)
+                .ToListAsync();
+        }
     }
 }

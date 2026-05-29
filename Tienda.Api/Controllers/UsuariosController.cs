@@ -24,7 +24,6 @@ namespace Tienda.Api.Controllers
         public UsuariosController(GerenteUseCase gerente)
         {
             _gerente = gerente;
-          
         }
         [HttpGet("Usuarios-con-roles")]
         [Authorize(Roles = "Gerente")]
@@ -38,6 +37,7 @@ namespace Tienda.Api.Controllers
         public async Task<IActionResult> PatchRol([FromBody] UsuarioPatch usuario)
         {
             var us = await _gerente.AsignarRol(usuario.Email, usuario.RolActual, usuario.RolNuevo);
+            if (us is null) return BadRequest();
             return Ok(us);
         }
         [HttpDelete("Eliminar-Usuario")]
