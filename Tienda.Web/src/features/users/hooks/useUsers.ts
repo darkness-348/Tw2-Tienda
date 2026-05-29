@@ -1,50 +1,22 @@
-import { useState, useEffect, useCallback } from 'react';
-import type { UsuarioConPersona, RolUsuario } from '../types';
-import { usersService } from '../services/usersService';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { usersService } from "../services/users.service";
+import type { CreateUsuarioDTO, UpdateUsuarioDTO, UsuariosFilter } from "../types/users.types";
 
-export function useUsers() {
-  const [users, setUsers] = useState<UsuarioConPersona[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterRol, setFilterRol] = useState<RolUsuario>('Todos');
-
-  const load = useCallback(async () => {
-    setLoading(true);
-    const data = await usersService.getAll();
-    setUsers(data);
-    setLoading(false);
-  }, []);
-
-  useEffect(() => { load(); }, [load]);
-
-  const filteredUsers = users.filter(u => {
-    const term = searchTerm.toLowerCase();
-    const matchSearch =
-      `${u.Nombres} ${u.Apellidos}`.toLowerCase().includes(term) ||
-      u.Email.toLowerCase().includes(term) ||
-      u.Ci.toLowerCase().includes(term);
-    const matchRol = filterRol === 'Todos' || u.Rol === filterRol;
-    return matchSearch && matchRol;
-  });
-
-  const toggleEstado = useCallback(async (id: number) => {
-    const updated = await usersService.toggleEstado(id);
-    setUsers(updated);
-  }, []);
-
-  const updateUser = useCallback(async (id: number, data: Partial<UsuarioConPersona>) => {
-    const updated = await usersService.update(id, data);
-    setUsers(updated);
-  }, []);
-
-  return {
-    filteredUsers,
-    loading,
-    searchTerm,
-    setSearchTerm,
-    filterRol,
-    setFilterRol,
-    toggleEstado,
-    updateUser,
-  };
+export function useUsuarios(filter?: UsuariosFilter) {
+  return useQuery({ queryKey: ["usuarios", filter], queryFn: () => usersService.listar(filter) });
+}
+export function useUsuario(id: number) {
+  return useQuery({ queryKey: ["usuarios", id], queryFn: () => usersService.obtenerPorId(id), enabled: !!id });
+}
+export function useCreateUsuario() {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: (dto: CreateUsuarioDTO) => usersService.crear(dto), onSuccess: () => qc.invalidateQueries({ queryKey: ["usuarios"] }) });
+}
+export function useUpdateUsuario() {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: (dto: UpdateUsuarioDTO) => usersService.actualizar(dto), onSuccess: () => qc.invalidateQueries({ queryKey: ["usuarios"] }) });
+}
+export function useToggleUsuarioEstado() {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: (id: number) => usersService.toggleEstado(id), onSuccess: () => qc.invalidateQueries({ queryKey: ["usuarios"] }) });
 }
