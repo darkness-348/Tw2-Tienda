@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tienda.Application.Dtos;
 using Tienda.Application.Services;
+using Tienda.Domain.Entitys;
 using Tienda.Infrastructure.Repositories;
 
 namespace Tienda.Api.Controllers
@@ -38,7 +39,7 @@ namespace Tienda.Api.Controllers
         }
 
         [HttpPost("Crear-Producto")]
-        [Authorize(Roles ="EncargadoAlmacen")]
+        [Authorize(Roles = "EncargadoAlmacen")]
         public async Task<IActionResult> CrearProducto(CrearProductoRequest productoRequest)
         {
 
@@ -54,6 +55,75 @@ namespace Tienda.Api.Controllers
                 {
                     mensaje = ex.Message
                 });
+            }
+        }
+
+        [HttpDelete("Eliminar-Producto/{codigoBarras}")]
+        [Authorize(Roles = "EncargadoAlmacen")]
+        public async Task<IActionResult> EliminarProducto(string codigoBarras)
+        {
+            try
+            {
+                var producto = await _producto.DeleteProducto(codigoBarras);
+                return Ok(producto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    mensaje = ex.Message
+                });
+            }
+        }
+
+        [HttpPut("Actualizar-Producto/{codigoBarras}")]
+        [Authorize(Roles = "EncargadoAlmacen")]
+        public async Task<IActionResult> ActualizarProducto(
+            string codigoBarras,
+            UpdateProductoRequest request)
+        {
+            try
+            {
+                var producto = await _producto.UpdateProducto(codigoBarras, request);
+
+                return Ok(producto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    mensaje = ex.Message
+                });
+            }
+        }
+        [HttpGet("Stock/{codigoBarras}")]
+        public async Task<IActionResult> GetStock(string codigoBarras)
+        {
+            try
+            {
+                var stock = await _producto.GetStock(codigoBarras);
+                return Ok(stock);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    mensaje = ex.Message
+                });
+            }
+        }
+
+        [HttpGet("Inventario")]
+        public async Task<IActionResult> GetInventario()
+        {
+            try
+            {
+                var inventario = await _producto.GetInventario();
+                return Ok(inventario);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
             }
         }
 

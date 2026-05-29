@@ -20,7 +20,6 @@ namespace Tienda.Domain.Entitys
         public DateTime FechaVencimiento { get; set; }
         public EstadoProducto EstadoProducto { get; set; }
         public string CodigoBarras { get; set; } = string.Empty;
-        public string CodigoProducto {get; set;}=string.Empty;
 
         // Propiedades de Navegación
         public virtual Categoria? Categoria { get; set; }
