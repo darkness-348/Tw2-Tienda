@@ -35,7 +35,7 @@ namespace Tienda.Infrastructure.Repositories
                 .Where(p => p.EstadoProducto == EstadoProducto.Bueno)
                 .ToListAsync();
         }
-
+//oh yeah
         public async Task<Producto?> SetEstadoProductoByCodigoBarrasAsync(string CodigoBarras, EstadoProducto estado)
         {
             var producto = await _context.Productos
