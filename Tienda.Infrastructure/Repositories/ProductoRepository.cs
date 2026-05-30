@@ -35,7 +35,7 @@ namespace Tienda.Infrastructure.Repositories
                 .Where(p => p.EstadoProducto == EstadoProducto.Bueno)
                 .ToListAsync();
         }
-
+//oh yeah
         public async Task<Producto?> SetEstadoProductoByCodigoBarrasAsync(string CodigoBarras, EstadoProducto estado)
         {
             var producto = await _context.Productos
@@ -114,5 +114,18 @@ namespace Tienda.Infrastructure.Repositories
 
             return list.Select(x => (x.CodigoBarras, x.Nombre, x.Entradas - x.Salidas)).ToList();
         }
+
+
+        public async Task<List<Producto>> ObtenerPorNombres(List<string> nombres)
+        {
+            if (nombres == null || nombres.Count == 0)
+                return new List<Producto>();
+
+            return await _context.Productos
+                .Where(p => nombres.Contains(p.Nombre))
+                .Include(p => p.Categoria)
+                .ToListAsync();
+        }
+
     }
 }

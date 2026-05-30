@@ -9,6 +9,14 @@ namespace Tienda.Application.Dtos
         public string NombreProducto { get; set; }
         public decimal Precio { get; set; }
         public int Cantidad { get; set; }
-        public decimal Subtotal { get;set;}
+        public decimal Subtotal { get; set
+            {
+                Subtotal = Precio * Cantidad;
+            }
+        }
+    }
+    public class GetDetalleVentaDTO
+    {
+
     }
 }
