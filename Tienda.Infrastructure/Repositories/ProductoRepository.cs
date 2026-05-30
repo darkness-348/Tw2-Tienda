@@ -114,7 +114,7 @@ namespace Tienda.Infrastructure.Repositories
 
             return list.Select(x => (x.CodigoBarras, x.Nombre, x.Entradas - x.Salidas)).ToList();
         }
-<<<<<<< HEAD
+
 
         public async Task<List<Producto>> ObtenerPorNombres(List<string> nombres)
         {
@@ -126,7 +126,6 @@ namespace Tienda.Infrastructure.Repositories
                 .Include(p => p.Categoria)
                 .ToListAsync();
         }
-=======
->>>>>>> 39a9edcadd2f8e165140d328598c57d29560cfd5
+
     }
 }
