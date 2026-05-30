@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Tienda.Application.Dtos;
 using Tienda.Application.Interfaces;
@@ -34,6 +35,11 @@ namespace Tienda.Application.Services
         public async Task<CategoryDTO> UpdateCategoryAsync(string currentName, string newName)
         {
             var category = await _categoryRepository.UpdateCategoria(currentName, newName);
+            if (category is null)
+            {
+                throw new Exception($"La categoría '{currentName}' no existe.");
+            }
+
             var categoryDto = new CategoryDTO
             {
                 Id = category.Id,
@@ -46,6 +52,10 @@ namespace Tienda.Application.Services
         public async Task<CategoryDTO> DelateCategoryAsync(string categoryName)
         {
             var category = await _categoryRepository.DeleteCategoria(categoryName);
+            if (category is null)
+            {
+                throw new Exception($"La categoría '{categoryName}' no existe.");
+            }
 
             var categoryDto = new CategoryDTO
             {

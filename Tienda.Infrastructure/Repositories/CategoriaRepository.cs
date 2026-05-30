@@ -26,7 +26,38 @@ namespace Tienda.Infrastructure.Repositories
 
         public async Task<Categoria?> GetByCategoriaNombre(string categoriNombre)
         {
-            return await _context.Categorias.FirstOrDefaultAsync(p =>p.Nombre==categoriNombre);
+            return await _context.Categorias.FirstOrDefaultAsync(p => p.Nombre == categoriNombre);
+        }
+
+        public async Task<List<Categoria>> GetAllCategorias()
+        {
+            return await _context.Categorias.ToListAsync();
+        }
+
+        public async Task<Categoria?> UpdateCategoria(string currentName, string newName)
+        {
+            var categoria = await _context.Categorias.FirstOrDefaultAsync(c => c.Nombre == currentName);
+            if (categoria is null)
+            {
+                return null;
+            }
+
+            categoria.Nombre = newName;
+            await _context.SaveChangesAsync();
+            return categoria;
+        }
+
+        public async Task<Categoria?> DeleteCategoria(string categoryName)
+        {
+            var categoria = await _context.Categorias.FirstOrDefaultAsync(c => c.Nombre == categoryName);
+            if (categoria is null)
+            {
+                return null;
+            }
+
+            _context.Categorias.Remove(categoria);
+            await _context.SaveChangesAsync();
+            return categoria;
         }
     }
 }

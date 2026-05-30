@@ -7,6 +7,8 @@ namespace Tienda.Domain.Interfaces
 {
     public interface IVentaRepository
     {
+        Task<List<Venta>> GetAllVentas();
+        Task<Venta> GetVentaById(int idVenta);
         Task<int> RegistrarVenta(Venta venta);
  
     }

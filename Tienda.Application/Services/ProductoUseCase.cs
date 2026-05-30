@@ -41,11 +41,11 @@ namespace Tienda.Application.Services
             }
 
             var productoExistente = await _producto
-                .GetByCodigoProducotAsync(productoRequest.CodigoProducto);
+                .GetByCodigoBarrasAsync(productoRequest.CodigoBarras);
 
             if (productoExistente is not null)
             {
-                throw new Exception("Ya existe un producto con ese código.");
+                throw new Exception("Ya existe un producto con ese código de barras.");
             }
 
             var producto = new Producto
@@ -55,7 +55,6 @@ namespace Tienda.Application.Services
                 Descripcion = productoRequest.Descripcion,
                 FechaVencimiento = productoRequest.FechaVencimiento,
                 CodigoBarras = productoRequest.CodigoBarras,
-                CodigoProducto = productoRequest.CodigoProducto,
                 EstadoProducto = EstadoProducto.Bueno
             };
 
@@ -72,22 +71,6 @@ namespace Tienda.Application.Services
             await _productoproveedor
                 .AddProductoProveedor(productoProvedor);
 
-            // var movimiento = new MovimientoStock
-            // {
-            //     ProductoId = productoCreado.Id,
-            //     UsuarioId = usuarioId,
-            //     Cantidad = productoRequest.Cantidad,
-            //     FechaEntrega = DateTime.UtcNow,
-            //     Descripcion = "Registro inicial del producto",
-            //     EstadoMovimientoStock = EstadoMovimientoStock.Completado,
-            //     Total = productoRequest.PrecioCompra * productoRequest.Cantidad,
-            //     Unidades = "Unidad",
-            //     TipoMovimiento = "Entrada"
-            // };
-
-            // await _movimientoStockRepository
-            //     .AddMovimientoAsync(movimiento);
-
             return new ProductoDTO
             {
                 Nombre = productoCreado.Nombre,
@@ -98,9 +81,9 @@ namespace Tienda.Application.Services
         public async Task<List<ProductoDTO>> GetAllProductos()
         {
             var productos = await _producto.GetAllProductosAsync();
-            
+
             var productosDTO = new List<ProductoDTO>();
-            
+
             foreach (var producto in productos)
             {
                 productosDTO.Add(new ProductoDTO
@@ -109,9 +92,67 @@ namespace Tienda.Application.Services
                     Categoria = producto.Categoria?.Nombre ?? "Sin categoría"
                 });
             }
-            
+
             return productosDTO;
         }
 
+        public async Task<ProductoDTO> DeleteProducto(string codigoBarras)
+        {
+            var producto = await _producto.GetByCodigoBarrasAsync(codigoBarras);
+            if (producto is null)
+            {
+                throw new Exception("El producto no existe.");
+            }
+
+            var productoEliminado = await _producto.SetEstadoProductoByCodigoBarrasAsync(codigoBarras, EstadoProducto.Caducado);
+            if (productoEliminado is null)
+            {
+                throw new Exception("No se pudo eliminar el producto.");
+            }
+
+            return new ProductoDTO
+            {
+                Nombre = productoEliminado.Nombre,
+                Categoria = productoEliminado.Categoria?.Nombre ?? "Sin categoría"
+            };
+        }
+        public async Task<ProductoDTO> UpdateProducto(
+            string codigoBarras,
+            UpdateProductoRequest request)
+        {
+            var producto = new Producto
+            {
+                Nombre = request.Nombre,
+                Descripcion = request.Descripcion,
+                FechaVencimiento = request.FechaVencimiento,
+                EstadoProducto = request.EstadoProducto
+            };
+
+            var actualizado = await _producto
+                .UpdateProducto(codigoBarras, producto);
+
+            if (actualizado is null)
+            {
+                throw new Exception("Producto no encontrado.");
+            }
+
+            return new ProductoDTO
+            {
+                Nombre = actualizado.Nombre,
+                Categoria = actualizado.Categoria?.Nombre ?? ""
+            };
+        }
+        public async Task<StockProductoDTO> GetStock(string codigoBarras)
+        {
+            var stock = await _producto.GetStockDisponibleAsync(codigoBarras);
+
+            return new StockProductoDTO(codigoBarras, stock);
+        }
+
+        public async Task<List<StockProductoDTO>> GetInventario()
+        {
+            var inventarioDomain = await _producto.GetInventarioAsync();
+            return inventarioDomain.Select(i => new StockProductoDTO(i.CodigoBarras, i.StockDisponible, i.NombreProducto)).ToList();
+        }
     }
 }
