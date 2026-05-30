@@ -59,5 +59,28 @@ namespace Tienda.Infrastructure.Repositories
             await _context.SaveChangesAsync();
             return categoria;
         }
+
+        public async Task<List<Categoria>> GetAllCategorias()
+        {
+            return await _context.Categorias.ToListAsync();
+        }
+
+        public async Task<Categoria> UpdateCategoria(string currentName, string newName)
+        {
+            var categoria = await _context.Categorias.FirstOrDefaultAsync(c => c.Nombre == currentName)
+                ?? throw new Exception($"Categoría '{currentName}' no encontrada.");
+            categoria.Nombre = newName;
+            await _context.SaveChangesAsync();
+            return categoria;
+        }
+
+        public async Task<Categoria> DeleteCategoria(string categoryName)
+        {
+            var categoria = await _context.Categorias.FirstOrDefaultAsync(c => c.Nombre == categoryName)
+                ?? throw new Exception($"Categoría '{categoryName}' no encontrada.");
+            _context.Categorias.Remove(categoria);
+            await _context.SaveChangesAsync();
+            return categoria;
+        }
     }
 }
