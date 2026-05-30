@@ -42,11 +42,13 @@ namespace Tienda.Infrastructure.Repositories
         public async Task<Usuario?> AsignarRol( string email,Rol rol,Rol nuevoRol)
         {
             var user=await _context.Usuarios.FirstOrDefaultAsync(u=>u.Email==email && u.Rol==rol);
+
             if (user is null) return null;
             user.Rol = nuevoRol;
             await _context.SaveChangesAsync();
             return user;
         }
+  
         public async Task<Usuario> EliminarUsuario(string nombre, string email)
         {
             var user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Persona.Nombre == nombre && u.Email == email);
@@ -58,5 +60,18 @@ namespace Tienda.Infrastructure.Repositories
         } 
 
 
+        public async Task<Usuario?> ObtenerIdSegunJWT(int idUsuario)
+        {
+            var user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Id == idUsuario);
+            if (user is null) return null;
+            return user;
+        }
+
+        public async Task<Persona?> ObtenerPersonaId(int id)
+        {
+            var per = await _context.Personas.FirstOrDefaultAsync(p => p.Id == id);
+            if (per is null) return null;
+            return per;
+        }
     }
 }

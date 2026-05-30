@@ -12,7 +12,7 @@ using Tienda.Infrastructure;
 namespace Tienda.Infrastructure.Migrations
 {
     [DbContext(typeof(TiendaDBContext))]
-    [Migration("20260527182909_m2")]
+    [Migration("20260529005558_m2")]
     partial class m2
     {
         /// <inheritdoc />
@@ -219,6 +219,10 @@ namespace Tienda.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("CodigoProducto")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Descripcion")
                         .IsRequired()
                         .HasColumnType("text");
@@ -263,7 +267,7 @@ namespace Tienda.Infrastructure.Migrations
 
                     b.HasIndex("ProveedorId");
 
-                    b.ToTable("ProductoProveedores");
+                    b.ToTable("ProductosProveedores");
                 });
 
             modelBuilder.Entity("Tienda.Domain.Entitys.Proveedor", b =>
@@ -273,6 +277,10 @@ namespace Tienda.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CodigoProveedor")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Direccion")
                         .IsRequired()
@@ -432,7 +440,7 @@ namespace Tienda.Infrastructure.Migrations
             modelBuilder.Entity("Tienda.Domain.Entitys.ProductoProveedor", b =>
                 {
                     b.HasOne("Tienda.Domain.Entitys.Producto", "Producto")
-                        .WithMany("ProductosProveedor")
+                        .WithMany("ProductosProveedores")
                         .HasForeignKey("ProductoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -500,7 +508,7 @@ namespace Tienda.Infrastructure.Migrations
 
                     b.Navigation("MovimientosStock");
 
-                    b.Navigation("ProductosProveedor");
+                    b.Navigation("ProductosProveedores");
                 });
 
             modelBuilder.Entity("Tienda.Domain.Entitys.Proveedor", b =>

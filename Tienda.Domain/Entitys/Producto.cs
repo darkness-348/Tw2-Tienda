@@ -24,7 +24,7 @@ namespace Tienda.Domain.Entitys
         // Propiedades de Navegación
         public virtual Categoria? Categoria { get; set; }
         public virtual ICollection<MovimientoStock> MovimientosStock { get; set; } = new List<MovimientoStock>();
-        public virtual ICollection<ProductoProveedor> ProductosProveedor { get; set; } = new List<ProductoProveedor>();
+        public virtual ICollection<ProductoProveedor> ProductosProveedores { get; set; } = new List<ProductoProveedor>();
         public virtual ICollection<DetalleVenta> DetallesVenta { get; set; } = new List<DetalleVenta>();
     }
 }

@@ -17,7 +17,7 @@ namespace Tienda.Infrastructure
         public DbSet<Categoria> Categorias { get; set; }
         public DbSet<MovimientoStock> MovimientoStocks { get; set; }
         public DbSet<Proveedor> Proveedores { get; set; }
-        public DbSet<ProductoProveedor> ProductoProveedores { get; set; }
+        public DbSet<ProductoProveedor> ProductosProveedores { get; set; }
         public DbSet<Venta> Ventas { get; set; }
         public DbSet<DetalleVenta> DetalleVentas { get; set; }
         public DbSet<MetodoPago> MetodoPagos { get; set; }
@@ -61,7 +61,7 @@ namespace Tienda.Infrastructure
             // Relación Producto - ProductoProveedor
             modelBuilder.Entity<ProductoProveedor>()
                 .HasOne(pp => pp.Producto)
-                .WithMany(p => p.ProductosProveedor)
+                .WithMany(p => p.ProductosProveedores)
                 .HasForeignKey(pp => pp.ProductoId);
 
             // Relación Usuario - Venta
