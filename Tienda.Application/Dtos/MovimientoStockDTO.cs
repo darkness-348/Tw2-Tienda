@@ -28,14 +28,7 @@ namespace Tienda.Application.Dtos
         public string TipoMovimiento { get; set; } = string.Empty;
     }
 
-    public class ProveedorDTO
-    {
-        public int Id { get; set; }
-        public string Nombre { get; set; } = string.Empty;
-        public string CodigoProveedor { get; set; } = string.Empty;
-        public string Telefono { get; set; } = string.Empty;
-        public string Direccion { get; set; } = string.Empty;
-    }
+
     public class UpdateMovimientoStock
     {
         public string CodigoBarras { get; set; } = string.Empty;

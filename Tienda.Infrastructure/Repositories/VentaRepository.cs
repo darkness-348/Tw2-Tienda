@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,11 +27,28 @@ namespace Tienda.Infrastructure.Repositories
 
         public async Task<int> RegistrarVenta(Venta venta1)
         {
-            if (venta1 is null) throw new Exception();
+            if (venta1 is null)
+            {
+                throw new Exception();
+            }
             _venta.Ventas.Add(venta1);
             await _venta.SaveChangesAsync();
-            //una vez guardado se actualiza su id del objeto en memoria
             return venta1.Id;
+        }
+
+        public async Task<List<Venta>> GetVentasDiaAsync(DateTime fecha)
+        {
+            var inicioDia = fecha.Date;
+            var finDia = fecha.Date.AddDays(1).AddTicks(-1);
+            return await _venta.Ventas
+                .Include(v => v.Usuario)
+                .Include(v => v.Persona)
+                .Include(v => v.DetallesVenta)
+                    .ThenInclude(d => d.Producto)
+                .Include(v => v.MetodosPagoVenta)
+                    .ThenInclude(mp => mp.MetodoPago)
+                .Where(v => v.FechaVenta >= inicioDia && v.FechaVenta <= finDia)
+                .ToListAsync();
         }
       
     }

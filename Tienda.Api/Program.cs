@@ -12,15 +12,12 @@ using Tienda.Infrastructure.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 
-// Add services to the container.
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IPasswordHasher, BcryptPasswordHasher>();
-builder.Services.AddScoped<IPersonaRepository,PersonaRepository>();
-builder.Services.AddScoped<IMovimientoStockRepository,MovimientoStockRepository>();
-
-//es practicamente el mismo que arriba, ya que el gerente pedira esos pero es para confirmar
+builder.Services.AddScoped<IPersonaRepository, PersonaRepository>();
+builder.Services.AddScoped<IMovimientoStockRepository, MovimientoStockRepository>();
 builder.Services.AddScoped<GerenteUseCase>();
 builder.Services.AddScoped<ProductoUseCase>();
 builder.Services.AddScoped<MovimientoStockUseCase>();
@@ -28,14 +25,15 @@ builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
 builder.Services.AddScoped<IProductoProveedorRepository, ProductoProveedorRepository>();
 builder.Services.AddScoped<IProveedorRepository, ProveedorRepository>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
-
-
-builder.Services.AddScoped<IDetalleVentaRepository,DetalleVentaRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IProveedorService, ProveedorService>();
+builder.Services.AddScoped<IProductoService, ProductoService>();
+builder.Services.AddScoped<IVentaService, VentaService>();
+builder.Services.AddScoped<IDetalleVentaRepository, DetalleVentaRepository>();
 builder.Services.AddScoped<IVentaRepository, VentaRepository>();
 builder.Services.AddScoped<IMetodoPagoRepository, MetodoPagoRepository>();
 builder.Services.AddScoped<IMetodoPagoVentaRepository, MetodoPagoVentaRepository>();
-builder.Services.AddScoped<ITransactionManager, TransactionManagerRepository>(); // ← CORRECTO
-builder.Services.AddScoped<VentaService>(); // ← NUEVO
+builder.Services.AddScoped<ITransactionManager, TransactionManagerRepository>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 

@@ -8,8 +8,10 @@ namespace Tienda.Domain.Interfaces
 {
     public interface IProveedorRepository
     {
-        Task<Proveedor> GetByCodigoProveedorAsync(string CodigoProveedor);
+        Task<Proveedor?> GetByCodigoProveedorAsync(string CodigoProveedor);
         Task<Proveedor> AddProveedor(Proveedor proveedor);
         Task<List<Proveedor>> AllProveedorAsync();
+        Task<Proveedor?> UpdateProveedor(string CodigoProveedor, Proveedor proveedor);
+        Task<Proveedor?> DeleteProveedor(string CodigoProveedor);
     }
 }

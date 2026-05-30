@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Tienda.Application.Dtos;
+using Tienda.Application.Interfaces;
 using Tienda.Application.Services;
 
 namespace Tienda.Api.Controllers
@@ -11,8 +12,8 @@ namespace Tienda.Api.Controllers
     [Authorize]
     public class VentasController:ControllerBase
     {
-        private readonly VentaService _venta;
-        public VentasController(VentaService venta)
+        private readonly IVentaService _venta;
+        public VentasController(IVentaService venta)
         {
             _venta = venta;
         }
