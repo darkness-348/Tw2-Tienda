@@ -5,14 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Tienda.Domain.Entitys;
-using Tienda.Domain.Interfaces;
+using Tienda.Application.Interfaces;
 
 namespace Tienda.Infrastructure.Repositories
 {
-    public class CategoriaRepository :ICategoriaRepository
+    public class CategoryRepository :ICategoryRepository
     {
         private readonly TiendaDBContext _context;
-        public CategoriaRepository(TiendaDBContext context)
+        public CategoryRepository(TiendaDBContext context)
         {
             _context=context;
         }

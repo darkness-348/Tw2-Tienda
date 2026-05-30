@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Tienda.Application.Dtos;
 using Tienda.Application.Interfaces;
 using Tienda.Domain.Entitys;
-using Tienda.Domain.Interfaces;
+using Tienda.Application.Interfaces;
 
 namespace Tienda.Application.Services
 {

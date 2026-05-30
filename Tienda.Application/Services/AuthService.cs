@@ -4,7 +4,7 @@ using System.Text;
 using Tienda.Application.DTOs;
 using Tienda.Application.Interfaces;
 using Tienda.Domain.Entitys;
-using Tienda.Domain.Interfaces;
+using Tienda.Application.Interfaces;
 
 namespace Tienda.Application.Services
 {

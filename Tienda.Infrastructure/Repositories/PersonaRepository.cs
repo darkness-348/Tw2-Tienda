@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Tienda.Domain.Entitys;
-using Tienda.Domain.Interfaces;
+using Tienda.Application.Interfaces;
 
 namespace Tienda.Infrastructure.Repositories
 {

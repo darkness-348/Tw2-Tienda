@@ -4,7 +4,7 @@ using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
-using Tienda.Domain.Interfaces;
+using Tienda.Application.Interfaces;
 using Tienda.Domain.Entitys;
 
 namespace Tienda.Infrastructure.Auth

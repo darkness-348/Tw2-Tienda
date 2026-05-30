@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Tienda.Domain.Entitys;
 
-namespace Tienda.Domain.Interfaces
+namespace Tienda.Application.Interfaces
 {
     public interface IProductoProveedorRepository
     {

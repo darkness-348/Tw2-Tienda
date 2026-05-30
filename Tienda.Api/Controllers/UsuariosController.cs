@@ -8,7 +8,7 @@ using Tienda.Application.DTOs;
 using Tienda.Application.Interfaces;
 using Tienda.Application.Services;
 using Tienda.Domain.Entitys;
-using Tienda.Domain.Interfaces;
+using Tienda.Application.Interfaces;
 
 namespace Tienda.Api.Controllers
 {

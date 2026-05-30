@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Tienda.Application.Dtos;
 using Tienda.Domain.Entitys;
-using Tienda.Domain.Interfaces;
+using Tienda.Application.Interfaces;
 
 namespace Tienda.Application.Services
 {
@@ -13,8 +13,8 @@ namespace Tienda.Application.Services
         private readonly IProductoRepository _producto;
         private readonly IProductoProveedorRepository _productoproveedor;
         private readonly IProveedorRepository _proveedor;
-        private readonly ICategoriaRepository _categoria;
-        public ProductoUseCase(IProductoRepository producto, IProductoProveedorRepository productoProvedor, IProveedorRepository provedor, ICategoriaRepository categoria)
+        private readonly ICategoryRepository _categoria;
+        public ProductoUseCase(IProductoRepository producto, IProductoProveedorRepository productoProvedor, IProveedorRepository provedor, ICategoryRepository categoria)
         {
             _producto = producto;
             _productoproveedor = productoProvedor;

@@ -39,7 +39,7 @@ namespace Tienda.Api.Controllers
         }
 
         [HttpPost("Crear-Producto")]
-        [Authorize(Roles = "EncargadoAlmacen")]
+        [Authorize(Roles ="EncargadoAlmacen")]
         public async Task<IActionResult> CrearProducto(CrearProductoRequest productoRequest)
         {
 

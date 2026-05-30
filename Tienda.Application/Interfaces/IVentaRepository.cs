@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Tienda.Domain.Entitys;
 
-namespace Tienda.Domain.Interfaces
+namespace Tienda.Application.Interfaces
 {
     public interface IVentaRepository
     {

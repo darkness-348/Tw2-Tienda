@@ -216,10 +216,6 @@ namespace Tienda.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("CodigoProducto")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("Descripcion")
                         .IsRequired()
                         .HasColumnType("text");

@@ -5,14 +5,13 @@ using System.Text;
 using Tienda.Application.Dtos;
 using Tienda.Application.Interfaces;
 using Tienda.Domain.Entitys;
-using Tienda.Domain.Interfaces;
 
 namespace Tienda.Application.Services
 {
     public class CategoryService : ICategoryService
     {
-        private readonly ICategoriaRepository _categoryRepository;
-        public CategoryService(ICategoriaRepository categoryRepository)
+        private readonly ICategoryRepository _categoryRepository;
+        public CategoryService(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
         }

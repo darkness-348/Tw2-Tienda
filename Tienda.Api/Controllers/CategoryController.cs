@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Tienda.Application.Dtos;
 using Tienda.Application.Interfaces;
@@ -15,14 +16,15 @@ namespace Tienda.Api.Controllers
             _categoryService = categoryService;
         }
 
-        [HttpGet]
+        [HttpGet("listar-Categorias")]
         public async Task<IActionResult> GetAllCategories()
         {
             var categories = await _categoryService.GetAllCategoriesAsync();
             return Ok(categories);
         }
 
-        [HttpPost]
+        [HttpPost("Crear-Categoria")]
+        // [Authorize(Roles ="Gerente")]
         public async Task<IActionResult> AddCategory([FromBody] CategoryDTO dto)
         {
             try

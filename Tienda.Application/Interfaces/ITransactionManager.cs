@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tienda.Domain.Interfaces
+namespace Tienda.Application.Interfaces
 {
     public interface ITransaction : IDisposable
     {
@@ -16,4 +16,3 @@ namespace Tienda.Domain.Interfaces
         Task<ITransaction> BeginTransactionAsync();
     }
 }
-

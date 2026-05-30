@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Tienda.Domain.Entitys;
 
-namespace Tienda.Domain.Interfaces
+namespace Tienda.Application.Interfaces
 {
-    public interface ICategoriaRepository
+    public interface ICategoryRepository
     {
         Task<Categoria?> GetByCategoriaNombre(string categoriNombre);
         Task<Categoria> AddCategoria(Categoria categoria);
