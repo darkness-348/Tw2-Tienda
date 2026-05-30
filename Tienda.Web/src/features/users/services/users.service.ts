@@ -22,7 +22,8 @@ export const usersService = {
       if (filter.estado) r = r.filter((u) => u.estado === filter.estado);
       return r;
     }
-    const { data } = await api.get<Usuario[]>("/usuarios", { params: filter });
+    // GET /api/Usuarios/Usuarios-con-roles  (returns [{nombre, email, rol, estado}])
+    const { data } = await api.get<Usuario[]>("/Usuarios/Usuarios-con-roles");
     return data;
   },
 
@@ -33,8 +34,11 @@ export const usersService = {
       if (!u) throw new Error(`Usuario ${id} no encontrado`);
       return u;
     }
-    const { data } = await api.get<Usuario>(`/usuarios/${id}`);
-    return data;
+    // No hay endpoint por id — listar y filtrar
+    const { data } = await api.get<Usuario[]>("/Usuarios/Usuarios-con-roles");
+    const u = data.find((u: Usuario) => u.id === id);
+    if (!u) throw new Error(`Usuario ${id} no encontrado`);
+    return u;
   },
 
   async crear(dto: CreateUsuarioDTO): Promise<Usuario> {
@@ -49,7 +53,8 @@ export const usersService = {
       mockUsuarios.push(newUser);
       return newUser;
     }
-    const { data } = await api.post<Usuario>("/usuarios", dto);
+    // No hay endpoint de creación directa — usar registro en AuthController
+    const { data } = await api.post<Usuario>("/Auth/register", dto);
     return data;
   },
 
@@ -65,7 +70,13 @@ export const usersService = {
       };
       return mockUsuarios[idx];
     }
-    const { data } = await api.put<Usuario>(`/usuarios/${dto.id}`, dto);
+    // PATCH /api/Usuarios/Actualizar-Rol-Email  { Email, RolActual, RolNuevo }
+    const target = mockUsuarios.find((u) => u.id === dto.id);
+    const { data } = await api.patch<Usuario>("/Usuarios/Actualizar-Rol-Email", {
+      Email: target?.email ?? dto.id,
+      RolActual: target?.rol,
+      RolNuevo: dto.rol,
+    });
     return data;
   },
 
@@ -77,7 +88,12 @@ export const usersService = {
       u.estado = u.estado === "Activo" ? "Deshabilitado" : "Activo";
       return u;
     }
-    const { data } = await api.patch<Usuario>(`/usuarios/${id}/estado`, {});
+    // DELETE /api/Usuarios/Eliminar-Usuario  { Nombre, Email }
+    // (backend uses delete, not toggle — send delete request)
+    const target = mockUsuarios.find((u) => u.id === id);
+    const { data } = await api.delete<Usuario>("/Usuarios/Eliminar-Usuario", {
+      data: { Nombre: `${target?.persona?.nombres} ${target?.persona?.apellidos}`, Email: target?.email },
+    });
     return data;
   },
 };

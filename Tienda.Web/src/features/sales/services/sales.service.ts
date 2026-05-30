@@ -23,13 +23,15 @@ export const salesService = {
       const page = filter.page || 1; const limit = filter.limit || 10;
       return { data: filtered.slice((page - 1) * limit, page * limit), total: filtered.length, page, limit };
     }
-    const { data } = await api.get<VentasListResponse>("/ventas", { params: filter });
-    return data;
+    // GET /api/Ventas  (Gerente only) → List<IdVentaDTO>
+    const { data } = await api.get<Venta[]>("/Ventas");
+    return { data, total: data.length, page: 1, limit: data.length };
   },
 
   async obtenerPorId(id: number): Promise<Venta> {
     if (USE_MOCKS) { await delay(); const v = mockVentas.find((v) => v.id === id); if (!v) throw new Error(`Venta ${id} no encontrada`); return v; }
-    const { data } = await api.get<Venta>(`/ventas/${id}`);
+    // GET /api/Ventas/{idVenta}
+    const { data } = await api.get<Venta>(`/Ventas/${id}`);
     return data;
   },
 
@@ -49,7 +51,25 @@ export const salesService = {
       mockVentas.push(newVenta);
       return newVenta;
     }
-    const { data } = await api.post<Venta>("/ventas", dto);
+    // POST /api/Ventas/Crear-Venta
+    // Body: { Venta: {Total, Estado, Descripcion}, MetodoPago: {Nombre, Monto, FechaPago}, Detalle: [{NombreProducto, Precio, Cantidad}] }
+    const { data } = await api.post<Venta>("/Ventas/Crear-Venta", {
+      Venta: {
+        Total: dto.items.reduce((s, i) => s + i.subtotal, 0),
+        Estado: 0, // EstadoVenta.Pendiente
+        Descripcion: dto.notas ?? "boleta",
+      },
+      MetodoPago: {
+        Nombre: String(dto.metodoPagoId),
+        Monto: dto.items.reduce((s, i) => s + i.subtotal, 0),
+        FechaPago: new Date().toISOString(),
+      },
+      Detalle: dto.items.map((i) => ({
+        NombreProducto: i.nombre,
+        Precio: i.precioUnitario,
+        Cantidad: i.cantidad,
+      })),
+    });
     return data;
   },
 

@@ -1,9 +1,12 @@
 export interface Proveedor {
   id: number;
   nombre: string;
+  contacto?: string;
   direccion: string;
   telefono: string;
-  relacion: string; // "Distribuidor", "Fabricante", "Importador"
+  email?: string;
+  codigoProveedor?: string;
+  relacion?: string; // "Distribuidor", "Fabricante", "Importador"
   estado: "Activo" | "Inactivo";
   calificacion?: number; // 1-5
   productosCount?: number;
@@ -13,9 +16,12 @@ export interface Proveedor {
 
 export interface CreateProveedorDTO {
   nombre: string;
+  contacto?: string;
   direccion: string;
   telefono: string;
-  relacion: string;
+  email?: string;
+  codigoProveedor?: string;
+  relacion?: string;
 }
 
 export interface UpdateProveedorDTO extends Partial<CreateProveedorDTO> {

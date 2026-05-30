@@ -18,8 +18,13 @@ export const stockService = {
       const page = filter.page || 1; const limit = filter.limit || 10;
       return { data: r.slice((page - 1) * limit, page * limit), total: r.length, page, limit };
     }
-    const { data } = await api.get<MovimientosResponse>("/stock/movimientos", { params: filter });
-    return data;
+    // GET /api/MovimientoStock/Pendientes  or  Completados
+    const [pendientes, completados] = await Promise.all([
+      api.get<MovimientoStock[]>("/MovimientoStock/Pendientes"),
+      api.get<MovimientoStock[]>("/MovimientoStock/Completados"),
+    ]);
+    const all = [...pendientes.data, ...completados.data];
+    return { data: all, total: all.length, page: 1, limit: all.length };
   },
 
   async registrarMovimiento(dto: CreateMovimientoStockDTO): Promise<MovimientoStock> {
@@ -29,7 +34,16 @@ export const stockService = {
       mockMovimientos.push(newMov);
       return newMov;
     }
-    const { data } = await api.post<MovimientoStock>("/stock/movimientos", dto);
+    // POST /api/MovimientoStock/Crear-Movimiento
+    const { data } = await api.post<MovimientoStock>("/MovimientoStock/Crear-Movimiento", {
+      CodigoBarras: dto.codigoBarras ?? dto.productoId,
+      Cantidad: dto.cantidad,
+      FechaEntrega: dto.fecha,
+      Descripcion: dto.descripcion ?? "",
+      Total: dto.total ?? 0,
+      Unidades: dto.unidades ?? "unidad",
+      TipoMovimiento: dto.tipo,
+    });
     return data;
   },
 
@@ -39,7 +53,8 @@ export const stockService = {
       const movs = mockMovimientos.filter((m) => m.productoId === productoId);
       return { productoId, cantidad: 15, stockMinimo: 5, ultimoMovimiento: movs[movs.length - 1] };
     }
-    const { data } = await api.get<StockActual>(`/stock/actual/${productoId}`);
+    // GET /api/Productos/Stock/{codigoBarras}
+    const { data } = await api.get<StockActual>(`/Productos/Stock/${productoId}`);
     return data;
   },
 };

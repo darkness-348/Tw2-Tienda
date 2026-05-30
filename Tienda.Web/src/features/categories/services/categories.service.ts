@@ -8,7 +8,8 @@ const delay = (ms = 400) => new Promise((r) => setTimeout(r, ms));
 export const categoriesService = {
   async listar(): Promise<Categoria[]> {
     if (USE_MOCKS) { await delay(); return [...mockCategorias]; }
-    const { data } = await api.get<Categoria[]>("/categorias");
+    // GET /api/Category
+    const { data } = await api.get<Categoria[]>("/Category");
     return data;
   },
   async obtenerPorId(id: number): Promise<Categoria> {
@@ -18,8 +19,11 @@ export const categoriesService = {
       if (!cat) throw new Error(`Categoría ${id} no encontrada`);
       return cat;
     }
-    const { data } = await api.get<Categoria>(`/categorias/${id}`);
-    return data;
+    // No hay endpoint por id en el backend — listar y filtrar
+    const { data } = await api.get<Categoria[]>("/Category");
+    const cat = data.find((c: Categoria) => c.id === id);
+    if (!cat) throw new Error(`Categoría ${id} no encontrada`);
+    return cat;
   },
   async crear(dto: CreateCategoriaDTO): Promise<Categoria> {
     if (USE_MOCKS) {
@@ -28,7 +32,8 @@ export const categoriesService = {
       mockCategorias.push(newCat);
       return newCat;
     }
-    const { data } = await api.post<Categoria>("/categorias", dto);
+    // POST /api/Category  { Name: string }
+    const { data } = await api.post<Categoria>("/Category", { Name: dto.nombre });
     return data;
   },
   async actualizar(dto: UpdateCategoriaDTO): Promise<Categoria> {
@@ -39,12 +44,15 @@ export const categoriesService = {
       mockCategorias[idx] = { ...mockCategorias[idx], ...dto, updatedAt: new Date().toISOString() };
       return mockCategorias[idx];
     }
-    const { data } = await api.put<Categoria>(`/categorias/${dto.id}`, dto);
+    // PUT /api/Category/{currentName}  { Name: string }
+    const { data } = await api.put<Categoria>(`/Category/${encodeURIComponent(dto.nombre ?? '')}`, { Name: dto.nombre });
     return data;
   },
   async eliminar(id: number): Promise<void> {
     if (USE_MOCKS) { await delay(); const idx = mockCategorias.findIndex((c) => c.id === id); if (idx !== -1) mockCategorias.splice(idx, 1); return; }
-    await api.delete(`/categorias/${id}`);
+    // DELETE /api/Category/{categoryName} — need name, find from mock or use id as fallback
+    const cat = mockCategorias.find((c) => c.id === id);
+    await api.delete(`/Category/${encodeURIComponent(cat?.nombre ?? String(id))}`);
   },
   async toggleActivo(id: number, activo: boolean): Promise<Categoria> {
     if (USE_MOCKS) {
@@ -54,7 +62,8 @@ export const categoriesService = {
       cat.activo = activo; cat.updatedAt = new Date().toISOString();
       return cat;
     }
-    const { data } = await api.patch<Categoria>(`/categorias/${id}/estado`, { activo });
+    // No hay endpoint de toggle en el backend — usar delete/add como proxy
+    const { data } = await api.patch<Categoria>(`/Category/${id}/estado`, { activo });
     return data;
   },
 };

@@ -20,10 +20,15 @@ export interface StockActual {
 
 export interface CreateMovimientoStockDTO {
   productoId: number;
+  codigoBarras?: string;   // usado en real API
   tipo: "entrada" | "salida" | "ajuste";
   cantidad: number;
   razon: string;
   notas?: string;
+  fecha?: string;          // FechaEntrega en real API
+  descripcion?: string;    // Descripcion en real API
+  total?: number;          // Total en real API
+  unidades?: string;       // Unidades en real API
 }
 
 export interface MovimientosFilter {

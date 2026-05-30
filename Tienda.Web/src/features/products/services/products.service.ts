@@ -37,8 +37,9 @@ export const productsService = {
       const limit = filter.limit || 10;
       return { data: filtered.slice((page - 1) * limit, page * limit), total: filtered.length, page, limit };
     }
-    const { data } = await api.get<ProductsListResponse>("/productos", { params: filter });
-    return data;
+    // GET /api/Productos/Obtener-Productos
+    const { data } = await api.get<Product[]>("/Productos/Obtener-Productos");
+    return { data, total: data.length, page: 1, limit: data.length };
   },
 
   async obtenerPorId(id: number): Promise<Product> {
@@ -48,7 +49,8 @@ export const productsService = {
       if (!product) throw new Error(`Producto ${id} no encontrado`);
       return product;
     }
-    const { data } = await api.get<Product>(`/productos/${id}`);
+    // GET /api/Productos/Stock/{codigoBarras}
+    const { data } = await api.get<Product>(`/Productos/Stock/${id}`);
     return data;
   },
 
@@ -74,7 +76,16 @@ export const productsService = {
       mockProducts.push(newProduct);
       return newProduct;
     }
-    const { data } = await api.post<Product>("/productos", dto);
+    // POST /api/Productos/Crear-Producto
+    const { data } = await api.post<Product>("/Productos/Crear-Producto", {
+      CodigoProvedor: dto.proveedorId?.toString(),
+      Categoria: dto.categoriaId?.toString(),
+      Nombre: dto.nombre,
+      Descripcion: dto.descripcion,
+      FechaVencimiento: dto.fechaVencimiento,
+      CodigoBarras: dto.codigoProducto,
+      PrecioCompra: dto.precioProveedor ?? dto.precio,
+    });
     return data;
   },
 
@@ -86,7 +97,12 @@ export const productsService = {
       mockProducts[idx] = { ...mockProducts[idx], ...dto, updatedAt: new Date().toISOString() };
       return mockProducts[idx];
     }
-    const { data } = await api.put<Product>(`/productos/${dto.id}`, dto);
+    // PUT /api/Productos/Actualizar-Producto/{codigoBarras}
+    const { data } = await api.put<Product>(`/Productos/Actualizar-Producto/${dto.codigoProducto ?? dto.id}`, {
+      Nombre: dto.nombre,
+      Descripcion: dto.descripcion,
+      FechaVencimiento: dto.fechaVencimiento,
+    });
     return data;
   },
 
@@ -97,7 +113,9 @@ export const productsService = {
       if (idx !== -1) mockProducts.splice(idx, 1);
       return;
     }
-    await api.delete(`/productos/${id}`);
+    // DELETE /api/Productos/Eliminar-Producto/{codigoBarras}
+    const product = mockProducts.find((p) => p.id === id);
+    await api.delete(`/Productos/Eliminar-Producto/${product?.codigoProducto ?? id}`);
   },
 
   async toggleActivo(id: number, activo: boolean): Promise<Product> {
@@ -109,13 +127,18 @@ export const productsService = {
       product.updatedAt = new Date().toISOString();
       return product;
     }
-    const { data } = await api.patch<Product>(`/productos/${id}/estado`, { activo });
+    // PUT /api/Productos/Actualizar-Producto/{codigoBarras} con EstadoProducto
+    const product = mockProducts.find((p) => p.id === id);
+    const { data } = await api.put<Product>(`/Productos/Actualizar-Producto/${product?.codigoProducto ?? id}`, {
+      EstadoProducto: activo ? "Bueno" : "Caducado",
+    });
     return data;
   },
 
   async obtenerMasVendidos(): Promise<TopProductosResponse[]> {
     if (USE_MOCKS) { await delay(); return mockTopProducts; }
-    const { data } = await api.get<TopProductosResponse[]>("/productos/analisis/mas-vendidos");
+    // No hay endpoint específico; usar inventario como proxy
+    const { data } = await api.get<TopProductosResponse[]>("/Productos/Inventario");
     return data;
   },
 
@@ -125,8 +148,9 @@ export const productsService = {
       const now = new Date();
       return mockProducts.filter((p) => p.fechaVencimiento && new Date(p.fechaVencimiento) < now);
     }
-    const { data } = await api.get<Product[]>("/productos/vencidos");
-    return data;
+    // Filtrar en cliente desde el inventario
+    const { data } = await api.get<Product[]>("/Productos/Obtener-Productos");
+    return data.filter((p: Product) => p.fechaVencimiento && new Date(p.fechaVencimiento) < new Date());
   },
 
   async obtenerStockBajo(stockMinimo?: number): Promise<Product[]> {
@@ -134,7 +158,7 @@ export const productsService = {
       await delay();
       return mockProducts.filter((p) => p.stock <= (stockMinimo ?? p.stockMinimo));
     }
-    const { data } = await api.get<Product[]>("/productos/stock-bajo", { params: { stockMinimo } });
-    return data;
+    const { data } = await api.get<Product[]>("/Productos/Obtener-Productos");
+    return data.filter((p: Product) => p.stock <= (stockMinimo ?? p.stockMinimo));
   },
 };
