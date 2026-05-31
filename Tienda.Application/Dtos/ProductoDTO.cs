@@ -11,8 +11,9 @@ namespace Tienda.Application.Dtos
         public string Nombre { get; set; } = string.Empty;
         public string Categoria { get; set; } = string.Empty;
         public DateTime FechaVencimiento { get; set; }
-
-
+        public decimal Precio { get; set; }
+        public int Stock { get; set; }
+        public string Disponibilidad { get; set; } = string.Empty;
     }
     public class CrearProductoRequest
     {

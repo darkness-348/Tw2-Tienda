@@ -32,6 +32,8 @@ namespace Tienda.Infrastructure.Repositories
         {
             return await _context.Productos
                 .Include(p => p.Categoria)
+                .Include(p => p.ProductosProveedores)
+                .Include(p => p.MovimientosStock)
                 .Where(p => p.EstadoProducto == EstadoProducto.Bueno)
                 .ToListAsync();
         }
@@ -40,6 +42,8 @@ namespace Tienda.Infrastructure.Repositories
         {
             var producto = await _context.Productos
                 .Include(p => p.Categoria)
+                .Include(p => p.ProductosProveedores)
+                .Include(p => p.MovimientosStock)
                 .FirstOrDefaultAsync(p => p.CodigoBarras == CodigoBarras);
 
             if (producto is null)
@@ -56,6 +60,8 @@ namespace Tienda.Infrastructure.Repositories
         {
             var productoExistente = await _context.Productos
                 .Include(p => p.Categoria)
+                .Include(p => p.ProductosProveedores)
+                .Include(p => p.MovimientosStock)
                 .FirstOrDefaultAsync(p => p.CodigoBarras == codigoBarras);
             if (productoExistente is null)
             {

@@ -74,7 +74,11 @@ namespace Tienda.Application.Services
             return new ProductoDTO
             {
                 Nombre = productoCreado.Nombre,
-                Categoria = categoria.Nombre
+                Categoria = categoria.Nombre,
+                FechaVencimiento = productoCreado.FechaVencimiento,
+                Precio = productoRequest.PrecioCompra,
+                Stock = 0,
+                Disponibilidad = "Agotado"
             };
         }
 
@@ -86,10 +90,16 @@ namespace Tienda.Application.Services
 
             foreach (var producto in productos)
             {
+                var stock = producto.MovimientosStock.Where(m => m.TipoMovimiento == "Entrada").Sum(m => m.Cantidad)
+                          - producto.MovimientosStock.Where(m => m.TipoMovimiento == "Salida").Sum(m => m.Cantidad);
                 productosDTO.Add(new ProductoDTO
                 {
                     Nombre = producto.Nombre,
-                    Categoria = producto.Categoria?.Nombre ?? "Sin categoría"
+                    Categoria = producto.Categoria?.Nombre ?? "Sin categoría",
+                    FechaVencimiento = producto.FechaVencimiento,
+                    Precio = producto.ProductosProveedores.FirstOrDefault()?.PrecioCompra ?? 0,
+                    Stock = stock,
+                    Disponibilidad = stock > 0 ? "Disponible" : "Agotado"
                 });
             }
 
@@ -113,7 +123,11 @@ namespace Tienda.Application.Services
             return new ProductoDTO
             {
                 Nombre = productoEliminado.Nombre,
-                Categoria = productoEliminado.Categoria?.Nombre ?? "Sin categoría"
+                Categoria = productoEliminado.Categoria?.Nombre ?? "Sin categoría",
+                FechaVencimiento = productoEliminado.FechaVencimiento,
+                Precio = productoEliminado.ProductosProveedores.FirstOrDefault()?.PrecioCompra ?? 0,
+                Stock = 0,
+                Disponibilidad = "Agotado"
             };
         }
         public async Task<ProductoDTO> UpdateProducto(
@@ -136,10 +150,17 @@ namespace Tienda.Application.Services
                 throw new Exception("Producto no encontrado.");
             }
 
+            var stock = actualizado.MovimientosStock.Where(m => m.TipoMovimiento == "Entrada").Sum(m => m.Cantidad)
+                      - actualizado.MovimientosStock.Where(m => m.TipoMovimiento == "Salida").Sum(m => m.Cantidad);
+
             return new ProductoDTO
             {
                 Nombre = actualizado.Nombre,
-                Categoria = actualizado.Categoria?.Nombre ?? ""
+                Categoria = actualizado.Categoria?.Nombre ?? "",
+                FechaVencimiento = actualizado.FechaVencimiento,
+                Precio = actualizado.ProductosProveedores.FirstOrDefault()?.PrecioCompra ?? 0,
+                Stock = stock,
+                Disponibilidad = stock > 0 ? "Disponible" : "Agotado"
             };
         }
         public async Task<StockProductoDTO> GetStock(string codigoBarras)

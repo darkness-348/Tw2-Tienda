@@ -21,11 +21,19 @@ namespace Tienda.Application.Services
         public async Task<List<ProductoDTO>> GetProductosDisponiblesAsync()
         {
             var productos = await _productoRepository.GetAllProductosAsync();
-            return productos.Select(p => new ProductoDTO
+            return productos.Select(p =>
             {
-                Nombre = p.Nombre,
-                Categoria = p.Categoria?.Nombre ?? string.Empty,
-                FechaVencimiento = p.FechaVencimiento
+                var stock = p.MovimientosStock.Where(m => m.TipoMovimiento == "Entrada").Sum(m => m.Cantidad)
+                          - p.MovimientosStock.Where(m => m.TipoMovimiento == "Salida").Sum(m => m.Cantidad);
+                return new ProductoDTO
+                {
+                    Nombre = p.Nombre,
+                    Categoria = p.Categoria?.Nombre ?? string.Empty,
+                    FechaVencimiento = p.FechaVencimiento,
+                    Precio = p.ProductosProveedores.FirstOrDefault()?.PrecioCompra ?? 0,
+                    Stock = stock,
+                    Disponibilidad = stock > 0 ? "Disponible" : "Agotado"
+                };
             }).ToList();
         }
 
@@ -45,11 +53,19 @@ namespace Tienda.Application.Services
                 consulta = consulta.Where(p => p.Categoria != null && p.Categoria.Nombre.Contains(categoria, StringComparison.OrdinalIgnoreCase));
             }
 
-            return consulta.Select(p => new ProductoDTO
+            return consulta.Select(p =>
             {
-                Nombre = p.Nombre,
-                Categoria = p.Categoria?.Nombre ?? string.Empty,
-                FechaVencimiento = p.FechaVencimiento
+                var stock = p.MovimientosStock.Where(m => m.TipoMovimiento == "Entrada").Sum(m => m.Cantidad)
+                          - p.MovimientosStock.Where(m => m.TipoMovimiento == "Salida").Sum(m => m.Cantidad);
+                return new ProductoDTO
+                {
+                    Nombre = p.Nombre,
+                    Categoria = p.Categoria?.Nombre ?? string.Empty,
+                    FechaVencimiento = p.FechaVencimiento,
+                    Precio = p.ProductosProveedores.FirstOrDefault()?.PrecioCompra ?? 0,
+                    Stock = stock,
+                    Disponibilidad = stock > 0 ? "Disponible" : "Agotado"
+                };
             }).ToList();
         }
     }
